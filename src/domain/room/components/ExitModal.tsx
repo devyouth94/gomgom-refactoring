@@ -1,7 +1,11 @@
 import { MS } from "common/components/modal/modalStyles";
-import React from "react";
 
-const ExitModal = ({ handleClick, handleClickLeave }) => {
+interface Props {
+  handleClick: () => void;
+  handleClickLeave: () => void;
+}
+
+const ExitModal = ({ handleClick, handleClickLeave }: Props) => {
   return (
     <>
       <MS.Window>

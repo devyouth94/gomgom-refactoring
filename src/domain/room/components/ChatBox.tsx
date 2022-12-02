@@ -9,11 +9,17 @@ import { fontExtraSmall, fontMedium, fontSmall } from "shared/themes/textStyle";
 
 import IconDropdown from "static/icons/Variety=Dropdown, Status=untab, Size=S.svg";
 import styled from "styled-components";
+import { ChatProps } from "types";
 
-const ChatBox = ({ chat, userKey }) => {
+interface Props {
+  chat: ChatProps[];
+  userKey: number;
+}
+
+const ChatBox = ({ chat, userKey }: Props) => {
   const { scrollRef, scrollState } = useScrollHeight(chat);
 
-  const divideMessageType = (key) => {
+  const divideMessageType = (key: number) => {
     if (key === 12) {
       return "system";
     } else if (key === userKey) {
@@ -23,7 +29,7 @@ const ChatBox = ({ chat, userKey }) => {
     }
   };
 
-  const isSameTime = (idx) => {
+  const isSameTime = (idx: number) => {
     return (
       chat[idx]?.userKey === chat[idx - 1]?.userKey &&
       nowTime(chat[idx]?.createdAt) === nowTime(chat[idx - 1]?.createdAt)
@@ -34,7 +40,7 @@ const ChatBox = ({ chat, userKey }) => {
     <>
       {!scrollState && (
         <S.NewMessage>
-          <div onClick={() => scrollRef.current.scrollIntoView({ behavior: "smooth" })}>
+          <div onClick={() => scrollRef.current?.scrollIntoView({ behavior: "smooth" })}>
             <span>마지막 메세지</span>
             <img src={IconDropdown} alt="IconDropdown" />
           </div>
@@ -52,10 +58,10 @@ const ChatBox = ({ chat, userKey }) => {
                 {/* 유저 메세지 */}
                 {item.userKey !== 12 && !isSameTime(idx) && (
                   <>
-                    <ProfileImg className="img" point={item.User.point} size={"4rem"} />
+                    <ProfileImg className="img" point={item.User.point} size="4rem" />
                     <div>
                       <div className="nickname">
-                        {item.userKey === parseInt(userKey) ? "" : item.User?.nickname}
+                        {item.userKey === userKey ? "" : item.User?.nickname}
                       </div>
                       <div className="middle">
                         <div className="chat">{item.chat}</div>
@@ -104,7 +110,7 @@ const S = {
 
       height: 3.2rem;
       padding: 0.3rem 0.6rem 0.3rem 1rem;
-      background-color: ${({ theme }) => theme.white};
+      background-color: ${({ theme }) => theme.color.white};
       border-radius: 1.6rem;
       box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
 
@@ -113,7 +119,7 @@ const S = {
       span {
         ${fontSmall};
         line-height: 2rem;
-        color: ${({ theme }) => theme.sub2};
+        color: ${({ theme }) => theme.color.sub2};
       }
     }
   `,
@@ -131,14 +137,14 @@ const S = {
       height: 2.6rem;
       padding: 3px 6px;
       margin: 1.2rem auto;
-      background-color: ${({ theme }) => theme.sub3};
+      background-color: ${({ theme }) => theme.color.sub3};
 
       border-radius: 1.3rem;
 
       .chat {
         ${fontSmall};
         line-height: 2rem;
-        color: ${({ theme }) => theme.white};
+        color: ${({ theme }) => theme.color.white};
       }
     }
 
@@ -160,7 +166,7 @@ const S = {
         text-align: end;
         ${fontSmall};
         line-height: 2rem;
-        color: ${({ theme }) => theme.sub2};
+        color: ${({ theme }) => theme.color.sub2};
       }
 
       .middle {
@@ -178,13 +184,13 @@ const S = {
 
         max-width: 21.3rem;
         padding: 1rem;
-        background-color: ${({ theme }) => theme.main2};
+        background-color: ${({ theme }) => theme.color.main2};
 
         border-radius: 2rem 0.4rem 2rem 2rem;
 
         ${fontMedium};
         line-height: 2.1rem;
-        color: ${({ theme }) => theme.white};
+        color: ${({ theme }) => theme.color.white};
 
         word-wrap: break-word;
         word-break: break-all;
@@ -196,7 +202,7 @@ const S = {
 
         ${fontExtraSmall};
         line-height: 1.8rem;
-        color: ${({ theme }) => theme.sub3};
+        color: ${({ theme }) => theme.color.sub3};
       }
     }
 
@@ -215,7 +221,7 @@ const S = {
       .nickname {
         ${fontSmall};
         line-height: 2rem;
-        color: ${({ theme }) => theme.sub2};
+        color: ${({ theme }) => theme.color.sub2};
       }
 
       .middle {
@@ -232,7 +238,7 @@ const S = {
 
         max-width: 21.3rem;
         padding: 1rem;
-        background-color: ${({ theme }) => theme.white};
+        background-color: ${({ theme }) => theme.color.white};
 
         border-radius: 0.4rem 2rem 2rem 2rem;
 
@@ -249,7 +255,7 @@ const S = {
 
         ${fontExtraSmall};
         line-height: 1.8rem;
-        color: ${({ theme }) => theme.sub3};
+        color: ${({ theme }) => theme.color.sub3};
       }
     }
   `,

@@ -9,7 +9,7 @@ import styled from "styled-components";
 interface Props {
   className?: string;
   point: number;
-  size: string;
+  size?: string;
 }
 
 const ProfileImg = ({ className, point, size }: Props) => {
@@ -31,7 +31,7 @@ const ProfileImg = ({ className, point, size }: Props) => {
 };
 export default ProfileImg;
 
-const Profile = styled.div<{ size: string }>`
+const Profile = styled.div<{ size: string | undefined }>`
   display: flex;
   align-items: center;
   justify-content: center;

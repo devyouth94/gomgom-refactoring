@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import _ from "lodash";
+import { ChatProps } from "types";
 
-const useScrollHeight = (chat) => {
-  const scrollRef = useRef();
+const useScrollHeight = (chat: ChatProps[]) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollState, setScrollState] = useState(true);
 
   const scrollEvent = _.debounce((event) => {
@@ -19,7 +20,7 @@ const useScrollHeight = (chat) => {
 
   useEffect(() => {
     if (!scrollState) return;
-    scrollRef.current.scrollIntoView();
+    scrollRef.current?.scrollIntoView();
   }, [chat, scrollState]);
 
   return { scrollRef, scrollState };

@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { User } from "types";
 import { MS } from "common/components/modal/modalStyles";
 import ProfileImg from "common/elements/ProfileImg";
 import { fontMedium } from "shared/themes/textStyle";
 import styled from "styled-components";
 
-const DeleteModal = ({ socket, roomKey, userKey, handleClickDelete, handleClickLeave }) => {
+interface Props {
+  socket: any;
+  roomKey: number;
+  userKey: number;
+  handleClickDelete: () => void;
+  handleClickLeave: () => void;
+}
+
+const DeleteModal = ({ socket, roomKey, userKey, handleClickDelete, handleClickLeave }: Props) => {
   const [isSelect, setIsSelect] = useState(0);
-  const [nowUser, setNowUser] = useState([]);
+  const [nowUser, setNowUser] = useState<User[]>([]);
 
   useEffect(() => {
     socket.current.emit("showUsers", { roomKey, userKey });
-    socket.current.on("receive", (data) => {
+    socket.current.on("receive", (data: User[]) => {
       setNowUser([...data]);
     });
   }, [socket, roomKey, userKey]);
@@ -35,12 +44,12 @@ const DeleteModal = ({ socket, roomKey, userKey, handleClickDelete, handleClickL
               <div>*현재 상담방에 남아 있는 사람입니다.</div>
               <S.UserList number={isSelect}>
                 {nowUser.slice(1).map((user, idx) => (
-                  <S.User key={user.userKey} htmlFor={user.userKey}>
-                    <ProfileImg point={user.point} size={"4rem"} />
+                  <S.User key={user.userKey} htmlFor={String(user.userKey)}>
+                    <ProfileImg point={user.point} size="4rem" />
                     <input
                       type="radio"
                       hidden
-                      id={user.userKey}
+                      id={String(user.userKey)}
                       checked={isSelect === idx + 1}
                       onChange={() => setIsSelect(idx + 1)}
                     />
@@ -63,7 +72,7 @@ const DeleteModal = ({ socket, roomKey, userKey, handleClickDelete, handleClickL
 };
 
 const S = {
-  UserList: styled.div`
+  UserList: styled.div<{ number: number }>`
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -77,18 +86,18 @@ const S = {
     margin-bottom: 0.5rem;
 
     span {
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
       margin-top: 0.2rem;
     }
 
     //선택된 유저는 프로필에 메인컬러 보더가 생기고 닉네임이 메인 컬러로 변합니다
     label:nth-child(${(props) => props.number}) {
       div {
-        border: 0.15rem solid ${({ theme }) => theme.main2};
+        border: 0.15rem solid ${({ theme }) => theme.color.main2};
       }
 
       span {
-        color: ${({ theme }) => theme.main2};
+        color: ${({ theme }) => theme.color.main2};
       }
     }
   `,

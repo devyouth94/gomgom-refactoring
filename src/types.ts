@@ -84,3 +84,17 @@ export interface LocationState {
     now: string;
   };
 }
+
+export interface SocketData {
+  message: string;
+  userKey: number;
+  nickname: string;
+  point: number;
+  time?: string;
+}
+
+export interface User {
+  nickname: string;
+  point: number;
+  userKey: number;
+}

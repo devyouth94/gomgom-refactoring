@@ -9,6 +9,18 @@ import IconClose from "static/icons/Variety=close, Status=untab, Size=L.svg";
 import IconDelete from "static/icons/Variety=delete, Status=untab, Size=L.svg";
 import IconLogout from "static/icons/Variety=logout, Status=untab, Size=L.svg";
 import styled, { css } from "styled-components";
+import { RoomItemProps, User } from "types";
+
+interface Props {
+  socket: any;
+  roomKey: number;
+  userKey: number;
+  roomInfo: RoomItemProps;
+  handleChatMenu: () => void;
+  handleClickExit: () => void;
+  handleClickDelete: () => void;
+  handleClickKick: any;
+}
 
 const ChatMenu = ({
   socket,
@@ -19,12 +31,12 @@ const ChatMenu = ({
   handleClickExit,
   handleClickDelete,
   handleClickKick,
-}) => {
-  const [nowUser, setNowUser] = useState([]);
+}: Props) => {
+  const [nowUser, setNowUser] = useState<User[]>([]);
 
   useEffect(() => {
     socket.current.emit("showUsers", { roomKey, userKey });
-    socket.current.on("receive", (data) => {
+    socket.current.on("receive", (data: User[]) => {
       setNowUser([...data]);
     });
   }, [socket, roomKey, userKey]);
@@ -114,7 +126,7 @@ const S = {
     width: 30rem;
     /* height: calc(var(--vh, 1vh) * 100); */
     height: 100vh;
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
 
     z-index: 100;
   `,
@@ -139,7 +151,7 @@ const S = {
 
     padding: 0 2rem 2rem 2rem;
 
-    border-bottom: ${({ theme }) => `1px solid ${theme.sub4}`};
+    border-bottom: ${({ theme }) => `1px solid ${theme.color.sub4}`};
 
     div:nth-child(1) {
       ${fontBold};
@@ -174,7 +186,7 @@ const S = {
     height: 5.6rem;
   `,
 
-  Nickname: styled.div`
+  Nickname: styled.div<{ isMe: boolean }>`
     ${fontMedium}
     ${(props) =>
       props.isMe &&
@@ -192,13 +204,13 @@ const S = {
     height: 1.4rem;
     padding: 0.8rem;
     margin-right: -0.7rem;
-    background-color: ${({ theme }) => theme.main2};
+    background-color: ${({ theme }) => theme.color.main2};
 
     border-radius: 0.7rem 0.7rem 0 0.7rem;
 
     ${fontExtraSmall};
     ${fontExtraBold};
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.color.white};
   `,
 
   KickBadge: styled.div`
@@ -206,13 +218,13 @@ const S = {
     right: 0;
 
     padding: 0.5rem 0.8rem;
-    background-color: ${({ theme }) => theme.black};
+    background-color: ${({ theme }) => theme.color.black};
 
     border-radius: 1.4rem;
 
     ${fontExtraSmall};
     line-height: 1.8rem;
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.color.white};
 
     cursor: pointer;
   `,
@@ -227,7 +239,7 @@ const S = {
     width: 100%;
     height: 6.4rem;
     padding: 0 2rem;
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
 
     div {
       display: flex;

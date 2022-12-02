@@ -2,14 +2,22 @@ import React, { useState } from "react";
 import FooterInput from "common/components/FooterInput";
 import IconSend from "static/icons/Variety=send, Status=untab, Size=L.svg";
 
-const ChatInput = ({ socket, roomKey, userKey }) => {
+interface Props {
+  socket: any;
+  roomKey: number;
+  userKey: number;
+}
+
+const ChatInput = ({ socket, roomKey, userKey }: Props) => {
   const [chatInput, setChatInput] = useState("");
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChatInput(event.target.value);
   };
 
-  const handleSendMessage = (event) => {
+  const handleSendMessage = (
+    event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLImageElement>,
+  ) => {
     event.preventDefault();
     if (!chatInput.trim().length) return;
 

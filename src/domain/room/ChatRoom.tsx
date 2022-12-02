@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import instance from "app/module/instance";
 
@@ -8,9 +8,10 @@ import DeleteModal from "domain/room/components/DeleteModal";
 import KickModal from "./components/KickModal";
 import BasicModal from "common/components/modal/BasicModal";
 import Header from "common/components/Header";
-import ChatBox from "domain/room/ChatBox";
+import ChatBox from "domain/room/components/ChatBox";
 import ChatInput from "./components/ChatInput";
 
+import { LocationState } from "types";
 import useChatState from "./hooks/useChatState";
 import useModalState from "common/hooks/useModalState";
 import { userStorage } from "shared/utils/localStorage";
@@ -23,9 +24,9 @@ import styled from "styled-components";
 
 const ChatRoom = () => {
   const navigate = useNavigate();
-  const { state } = useLocation();
+  const { state } = useLocation() as LocationState;
 
-  const socket = useRef();
+  const socket = useRef<any>(null);
   const { roomKey } = useParams();
   const userKey = userStorage.getUserKey();
   const { roomInfo, chat, kickMessage, hostMessage } = useChatState({
@@ -33,7 +34,7 @@ const ChatRoom = () => {
     roomKey: Number(roomKey),
     userKey,
   });
-  const [kickUser, setKickUser] = useState({ key: null, nickname: "" });
+  const [kickUser, setKickUser] = useState({ key: 0, nickname: "" });
 
   const [chatMenu, handleChatMenu] = useModalState(false);
   const [exitModal, handleExitModal] = useModalState(false);
@@ -54,14 +55,14 @@ const ChatRoom = () => {
     handleClickBack();
   };
 
-  const handleClickKick = ({ key, nickname }) => {
+  const handleClickKick = ({ key, nickname }: { key: number; nickname: string }) => {
     setKickUser((prev) => ({ ...prev, key, nickname }));
     handleChatMenu();
     handleKickModal();
   };
 
   const handleSetKick = () => {
-    setKickUser({ key: null, nickname: "" });
+    setKickUser({ key: 0, nickname: "" });
     handleKickModal();
   };
 
@@ -166,7 +167,7 @@ const S = {
     width: 100%;
     height: 3.4rem;
     padding: 0 5rem;
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
 
     z-index: 8;

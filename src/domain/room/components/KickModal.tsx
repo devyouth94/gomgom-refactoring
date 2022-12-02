@@ -1,7 +1,22 @@
 import { MS } from "common/components/modal/modalStyles";
-import React from "react";
 
-const KickModal = ({ socket, roomKey, userKey, nickname, handleClickKick, handleSetKick }) => {
+interface Props {
+  socket: any;
+  roomKey: number;
+  userKey: number;
+  nickname: string;
+  handleClickKick: any;
+  handleSetKick: () => void;
+}
+
+const KickModal = ({
+  socket,
+  roomKey,
+  userKey,
+  nickname,
+  handleClickKick,
+  handleSetKick,
+}: Props) => {
   const handleKickUser = () => {
     socket.current.emit("expulsion", { roomKey, userKey });
     handleSetKick();
