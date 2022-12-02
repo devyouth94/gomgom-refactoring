@@ -5,9 +5,9 @@ interface Props extends WidthProps {
   children: React.ReactNode;
 }
 
-const Header = ({ children, w, isTransparent }: Props) => {
+const Header = ({ children, w, isTransparent, length }: Props) => {
   return (
-    <S.Header w={w} isTransparent={isTransparent}>
+    <S.Header w={w} isTransparent={isTransparent} length={length}>
       {children}
     </S.Header>
   );
@@ -18,6 +18,7 @@ export default Header;
 interface WidthProps {
   w?: string;
   isTransparent?: boolean;
+  length?: number;
 }
 
 const S = {
@@ -42,6 +43,7 @@ const S = {
     height: 6.4rem;
     padding: 0 2rem;
     background-color: ${(props) => (props.isTransparent ? "transparent" : props.theme.color.bg)};
+    border-bottom: ${(props) => (props.length ? null : `1px solid ${props.theme.color.sub4}`)};
 
     z-index: 9;
 

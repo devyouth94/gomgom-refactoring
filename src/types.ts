@@ -98,3 +98,8 @@ export interface User {
   point: number;
   userKey: number;
 }
+
+export interface MyInfo {
+  nickname: string;
+  point: number;
+}

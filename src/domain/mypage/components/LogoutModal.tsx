@@ -1,8 +1,11 @@
-import React from "react";
 import { MS } from "common/components/modal/modalStyles";
 import { userStorage } from "shared/utils/localStorage";
 
-const LogoutModal = ({ handleClick }) => {
+interface Props {
+  handleClick: () => void;
+}
+
+const LogoutModal = ({ handleClick }: Props) => {
   const handleLogout = () => {
     userStorage.clearStorage();
     handleClick();

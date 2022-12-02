@@ -1,8 +1,11 @@
-import React from "react";
 import { fontBold, fontSmall } from "shared/themes/textStyle";
 import styled from "styled-components";
 
-const Logout = ({ handleLogoutModal }) => {
+interface Props {
+  handleLogoutModal: () => void;
+}
+
+const Logout = ({ handleLogoutModal }: Props) => {
   return (
     <S.Logout>
       <span onClick={handleLogoutModal}>로그아웃</span>
@@ -19,7 +22,7 @@ const S = {
 
     ${fontSmall};
     ${fontBold};
-    color: ${({ theme }) => theme.sub2};
+    color: ${({ theme }) => theme.color.sub2};
 
     span {
       cursor: pointer;

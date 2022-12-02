@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import instance from "app/module/instance";
+import axios from "axios";
 import ProfileImg from "common/elements/ProfileImg";
 import Badge from "domain/mypage/components/Badge";
+import { MyInfo } from "types";
 import { userStorage } from "shared/utils/localStorage";
 import { fontBold, fontExtraBold } from "shared/themes/textStyle";
 import { fontExtraSmall, fontLarge, fontMedium } from "shared/themes/textStyle";
 import IconChange from "static/icons/Variety=Change, Status=untab, Size=S.svg";
 import styled from "styled-components";
 
-const UserContainer = ({ myInfo, handleModal }) => {
+interface Props {
+  myInfo: MyInfo;
+  handleModal: (msg?: string) => void;
+}
+
+const UserContainer = ({ myInfo, handleModal }: Props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [editNickname, setEditNickname] = useState("");
 
@@ -17,7 +24,7 @@ const UserContainer = ({ myInfo, handleModal }) => {
     setEditNickname(userStorage.getNickname());
   };
 
-  const handleOnChange = (event) => {
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditNickname(event.target.value);
   };
 
@@ -27,7 +34,9 @@ const UserContainer = ({ myInfo, handleModal }) => {
       userStorage.setNickname(data.nickname);
       setIsEdit(false);
     } catch (error) {
-      handleModal(error.response.data.errMsg);
+      if (axios.isAxiosError(error)) {
+        handleModal((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   };
 
@@ -77,7 +86,7 @@ const S = {
     align-items: center;
 
     height: 3.6rem;
-    border-bottom: 1px solid ${({ theme }) => theme.sub4};
+    border-bottom: 1px solid ${({ theme }) => theme.color.sub4};
 
     input {
       width: 100%;
@@ -126,7 +135,7 @@ const S = {
     min-width: 5rem;
     height: 3rem;
     margin-left: 0.8rem;
-    background-color: ${({ theme }) => theme.sub4};
+    background-color: ${({ theme }) => theme.color.sub4};
 
     border-radius: 1.8rem;
 

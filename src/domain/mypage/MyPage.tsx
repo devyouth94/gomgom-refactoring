@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import BasicModal from "common/components/modal/BasicModal";
 import LoginModal from "common/components/modal/LoginModal";
 import LogoutModal from "domain/mypage/components/LogoutModal";
 import UserDeleteModal from "domain/mypage/components/UserDeleteModal";
+import GradeInfoModal from "domain/mypage/components/GradeInfoModal";
 
 import Layout from "common/components/Layout";
 import UserContainer from "domain/mypage/components/UserContainer";
@@ -21,7 +22,6 @@ import { userStorage } from "shared/utils/localStorage";
 
 import { fontExtraBold, fontLarge } from "shared/themes/textStyle";
 import styled from "styled-components";
-import GradeInfoModal from "domain/mypage/components/GradeInfoModal";
 
 const MyPage = () => {
   const { pathname } = useLocation();
@@ -35,7 +35,7 @@ const MyPage = () => {
   const [userDeleteModal, handleUserDeleteModal] = useModalState(false);
 
   const [selectedGrade, setSelectedGrade] = useState(0);
-  const handleSelectGrade = (idx) => {
+  const handleSelectGrade = (idx: number) => {
     setSelectedGrade(idx + 1);
   };
 
@@ -75,7 +75,9 @@ const MyPage = () => {
             )}
           </S.HeaderBottom>
 
-          {userStorage.getToken() && <GradeInfo selectedGrade={selectedGrade} />}
+          {userStorage.getToken() && selectedGrade !== 0 && (
+            <GradeInfo selectedGrade={selectedGrade} />
+          )}
 
           <MyService
             handleLoginModal={handleLoginModal}
@@ -103,7 +105,7 @@ const S = {
     margin: 0 -2rem;
     padding: 0 2rem;
     height: 11.3rem;
-    background-color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.color.white};
 
     h1 {
       ${fontLarge};
@@ -115,7 +117,7 @@ const S = {
   HeaderBottom: styled.section`
     margin: 0 -2rem;
     padding: 0 2rem 2.4rem 2rem;
-    background-color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.color.white};
     border-radius: 0 0 2rem 2rem;
   `,
 };

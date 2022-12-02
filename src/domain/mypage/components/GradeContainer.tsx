@@ -1,10 +1,22 @@
-import React from "react";
 import { fontBold, fontMedium } from "shared/themes/textStyle";
 import { colorFromPoint, remainedPoint } from "shared/utils/calculate";
 import IconInformation from "static/icons/Variety=Information, Status=untab, Size=S.svg";
 import styled from "styled-components";
+import { MyInfo } from "types";
 
-const GradeContainer = ({ myInfo, selectedGrade, handleSelectGrade, handleGradeInfoModal }) => {
+interface Props {
+  myInfo: MyInfo;
+  selectedGrade: number;
+  handleSelectGrade: (idx: number) => void;
+  handleGradeInfoModal: () => void;
+}
+
+const GradeContainer = ({
+  myInfo,
+  selectedGrade,
+  handleSelectGrade,
+  handleGradeInfoModal,
+}: Props) => {
   return (
     <>
       <S.MyGrade>
@@ -49,7 +61,7 @@ const S = {
 
     height: 6.7rem;
 
-    border: 1px solid ${({ theme }) => theme.sub4};
+    border: 1px solid ${({ theme }) => theme.color.sub4};
     border-radius: 2rem;
 
     div {
@@ -66,18 +78,18 @@ const S = {
 
       > span:nth-child(2) {
         ${fontMedium};
-        color: ${({ theme }) => theme.main2};
+        color: ${({ theme }) => theme.color.main2};
       }
     }
 
     > div:nth-child(2) {
       margin: 1rem 0;
-      border-left: 1px solid ${({ theme }) => theme.sub4};
-      border-right: 1px solid ${({ theme }) => theme.sub4};
+      border-left: 1px solid ${({ theme }) => theme.color.sub4};
+      border-right: 1px solid ${({ theme }) => theme.color.sub4};
     }
   `,
 
-  GradeInfo: styled.article`
+  GradeInfo: styled.article<{ selectedGrade: number }>`
     margin-top: 2.4rem;
 
     img {
@@ -98,7 +110,7 @@ const S = {
       margin-top: 1.6rem;
 
       ${fontMedium};
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
 
       span {
         display: flex;
@@ -113,7 +125,7 @@ const S = {
       }
 
       > span:nth-child(${(props) => props.selectedGrade}) {
-        color: ${({ theme }) => theme.white};
+        color: ${({ theme }) => theme.color.white};
         background-color: ${(props) =>
           props.selectedGrade === 1
             ? "#D0D0D0"

@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import instance from "app/module/instance";
 import { userStorage } from "shared/utils/localStorage";
+import { MyInfo } from "types";
 
 const useGetMyInfo = () => {
-  const [myInfo, setMyInfo] = useState({});
+  const [myInfo, setMyInfo] = useState<MyInfo>({ nickname: "", point: 0 });
 
   const __getMyInfo = async () => {
-    try {
-      const { data } = await instance.get("/my");
-      setMyInfo(data.result);
-    } catch (error) {
-      throw new Error(error);
-    }
+    const { data } = await instance.get("/my");
+    setMyInfo(data.result);
   };
 
   useEffect(() => {

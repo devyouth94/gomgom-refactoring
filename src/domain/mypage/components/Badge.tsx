@@ -3,12 +3,16 @@ import { fontBold, fontSmall } from "shared/themes/textStyle";
 import { colorFromPoint } from "shared/utils/calculate";
 import styled from "styled-components";
 
-const Badge = ({ point }) => {
+interface Props {
+  point: number;
+}
+
+const Badge = ({ point }: Props) => {
   return <S.Badge point={point}>{colorFromPoint(point)}</S.Badge>;
 };
 
 const S = {
-  Badge: styled.div`
+  Badge: styled.div<{ point: number }>`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -33,7 +37,7 @@ const S = {
 
     ${fontBold};
     ${fontSmall};
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.color.white};
   `,
 };
 

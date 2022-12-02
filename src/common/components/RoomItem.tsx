@@ -10,7 +10,7 @@ import { RoomItemProps } from "types";
 interface Props {
   roomItem: {
     room: RoomItemProps;
-    entered: number[];
+    entered?: number[];
     length: number;
   };
   handleJoin: any;

@@ -1,9 +1,14 @@
-import React from "react";
 import instance from "app/module/instance";
+import axios from "axios";
 import { MS } from "common/components/modal/modalStyles";
 import { userStorage } from "shared/utils/localStorage";
 
-const UserDeleteModal = ({ handleClick, handleModal }) => {
+interface Props {
+  handleClick: () => void;
+  handleModal: (msg?: string) => void;
+}
+
+const UserDeleteModal = ({ handleClick, handleModal }: Props) => {
   const __deleteUser = async () => {
     try {
       await instance.delete("/user/del");
@@ -11,7 +16,9 @@ const UserDeleteModal = ({ handleClick, handleModal }) => {
       userStorage.clearStorage();
       handleModal("회원 탈퇴가 완료됐습니다.");
     } catch (error) {
-      handleModal(error.response.data.errMsg);
+      if (axios.isAxiosError(error)) {
+        handleModal((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   };
 

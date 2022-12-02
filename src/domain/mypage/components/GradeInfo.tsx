@@ -1,10 +1,7 @@
-import React from "react";
 import { fontMedium } from "shared/themes/textStyle";
 import styled from "styled-components";
 
-const GradeInfo = ({ selectedGrade }) => {
-  if (selectedGrade === 0) return;
-
+const GradeInfo = ({ selectedGrade }: { selectedGrade: number }) => {
   const pointFromGrade = () => {
     switch (selectedGrade) {
       case 1:
@@ -18,7 +15,7 @@ const GradeInfo = ({ selectedGrade }) => {
       case 5:
         return "101점 이상";
       default:
-        break;
+        return "";
     }
   };
 
@@ -33,7 +30,7 @@ const S = {
 
     height: 7rem;
     margin: 0 -2rem;
-    border-bottom: 1px solid ${({ theme }) => theme.sub4};
+    border-bottom: 1px solid ${({ theme }) => theme.color.sub4};
 
     ${fontMedium};
   `,

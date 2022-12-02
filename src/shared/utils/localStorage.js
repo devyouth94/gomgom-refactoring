@@ -15,7 +15,7 @@ const userStorage = {
   },
 
   getNickname: () => {
-    return localStorage.getItem("nickname");
+    return localStorage.getItem("nickname") || "";
   },
 
   getUserKey: () => {

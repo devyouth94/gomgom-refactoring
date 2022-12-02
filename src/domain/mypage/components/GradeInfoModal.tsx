@@ -1,9 +1,12 @@
-import React from "react";
 import { fontBold, fontLarge, fontMedium } from "shared/themes/textStyle";
 import IconClose from "static/icons/Variety=close, Status=untab, Size=L.svg";
 import styled from "styled-components";
 
-const GradeInfoModal = ({ handleClick }) => {
+interface Props {
+  handleClick: () => void;
+}
+
+const GradeInfoModal = ({ handleClick }: Props) => {
   return (
     <S.Container>
       <S.Header>
@@ -43,7 +46,7 @@ const S = {
     width: 100%;
     min-height: 100%;
     padding: 0 2rem;
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
     z-index: 9;
   `,
 
@@ -56,7 +59,7 @@ const S = {
     height: 6.4rem;
     margin: 0 -2rem;
     padding: 0 2rem;
-    border-bottom: 1px solid ${({ theme }) => theme.sub4};
+    border-bottom: 1px solid ${({ theme }) => theme.color.sub4};
 
     > img {
       width: 100%;
@@ -67,7 +70,7 @@ const S = {
       ${fontLarge}
 
       > span {
-        color: ${({ theme }) => theme.sub3};
+        color: ${({ theme }) => theme.color.sub3};
       }
     }
   `,
@@ -99,7 +102,7 @@ const S = {
 
     span {
       ${fontMedium};
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
       margin-left: 0.7rem;
     }
   `,

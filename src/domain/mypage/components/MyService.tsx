@@ -11,12 +11,17 @@ import IconPerson from "static/icons/Variety=profile, Status=tab, Size=L.svg";
 import IconNext from "static/icons/Variety=next, Status=untab, Size=M.svg";
 import styled from "styled-components";
 
+interface Props {
+  handleLoginModal: () => void;
+  handleUserDeleteModal: () => void;
+}
+
 export const QNA_LINK = "https://forms.gle/daCzxS5nhRZXzrUr9";
 
-const MyService = ({ handleLoginModal, handleUserDeleteModal }) => {
+const MyService = ({ handleLoginModal, handleUserDeleteModal }: Props) => {
   const navigate = useNavigate();
 
-  const handleClickService = (path) => {
+  const handleClickService = (path: string) => {
     if (!userStorage.getToken()) {
       handleLoginModal();
     } else {
@@ -88,12 +93,12 @@ const S = {
     margin-top: 3.2rem;
 
     ${fontBold};
-    color: ${({ theme }) => theme.sub2};
+    color: ${({ theme }) => theme.color.sub2};
   `,
 
   ItemContainer: styled.article`
     margin-top: 1.6rem;
-    background-color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.color.white};
 
     border-radius: 2rem;
 
