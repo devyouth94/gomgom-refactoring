@@ -6,8 +6,10 @@ const useAnswerState = () => {
   const [answer, setAnswer] = useState("");
 
   const clickAnswerHandler = async () => {
+    if (think) return;
+
     setThink(true);
-    setAnswer(false);
+    setAnswer("");
 
     try {
       const { data } = await instance.get("/advice");

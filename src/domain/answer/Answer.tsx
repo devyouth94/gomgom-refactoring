@@ -1,4 +1,3 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 
 import StartDisplay from "domain/answer/components/StartDisplay";
@@ -15,7 +14,7 @@ import ImageBubble2 from "static/images/speach bubble2.svg";
 import ImageCharacter1 from "static/images/Character1.svg";
 import ImageCharacter2 from "static/images/Character2.svg";
 
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const Answer = () => {
   const { pathname } = useLocation();
@@ -25,9 +24,9 @@ const Answer = () => {
     <>
       <StartDisplay />
 
-      <S.Header w={"4.5rem"}>
+      <Header w="4.5rem" isTransparent>
         <img onClick={() => window.location.reload()} src={Logo} alt="Logo" />
-      </S.Header>
+      </Header>
 
       <S.Layout>
         <S.Content>
@@ -55,9 +54,9 @@ const Answer = () => {
           )}
         </S.Content>
 
-        <S.GlobalButton think={think} onClick={think ? null : clickAnswerHandler}>
+        <GlobalButton onClick={clickAnswerHandler} position="absolute" bottom="9.6rem">
           {answer ? "곰곰의 해답 다시 듣기" : "곰곰의 해답 듣기"}
-        </S.GlobalButton>
+        </GlobalButton>
       </S.Layout>
 
       <Nav nowLocation={pathname} />
@@ -68,10 +67,6 @@ const Answer = () => {
 export default Answer;
 
 const S = {
-  Header: styled(Header)`
-    background-color: transparent;
-  `,
-
   Layout: styled.main`
     @media ${({ theme }) => theme.device.PC} {
       left: ${({ theme }) => theme.style.left};
@@ -83,7 +78,6 @@ const S = {
     position: relative;
 
     width: 100%;
-    /* height: 100%; */
     height: calc(var(--vh, 1vh) * 100);
     background: radial-gradient(15rem 32rem at 50% 45%, #ff9b25 0%, #000000 82.03%);
 
@@ -137,17 +131,5 @@ const S = {
     .center {
       text-align: center;
     }
-  `,
-
-  GlobalButton: styled(GlobalButton)`
-    position: absolute;
-    bottom: 9.6rem;
-
-    ${(props) =>
-      props.think &&
-      css`
-        background-color: #ba8c57;
-        color: #d1c4b5;
-      `}
   `,
 };

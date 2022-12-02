@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MS } from "common/components/modal/modalStyles";
 import { fontBold } from "shared/themes/textStyle";
 import styled from "styled-components";
@@ -28,7 +28,7 @@ const StartDisplay = () => {
 const S = {
   Text: styled.div`
     ${fontBold};
-    color: ${({ theme }) => theme.main2};
+    color: ${({ theme }) => theme.color.main2};
   `,
 };
 
