@@ -1,5 +1,3 @@
-import React from "react";
-
 import { borderBoxDefault } from "shared/themes/boxStyle";
 import { fontBold, fontMedium, fontSmall } from "shared/themes/textStyle";
 
@@ -7,8 +5,20 @@ import { ReactComponent as IconPerson } from "static/icons/Variety=person, Statu
 import { ReactComponent as IconAnnounce } from "static/icons/Variety=announce, Status=untab, Size=M.svg";
 import { ReactComponent as IconAnnounced } from "static/icons/Variety=announced, Status=untab, Size=M.svg";
 import styled from "styled-components";
+import { RoomItemProps } from "types";
 
-const RoomItem = ({ roomItem: { room, entered, length }, handleJoin, idx, setRef }) => {
+interface Props {
+  roomItem: {
+    room: RoomItemProps;
+    entered: number[];
+    length: number;
+  };
+  handleJoin: any;
+  idx: number;
+  setRef: any;
+}
+
+const RoomItem = ({ roomItem: { room, entered, length }, handleJoin, idx, setRef }: Props) => {
   return (
     <S.Container
       onClick={() => handleJoin(room.roomKey)}
@@ -44,8 +54,15 @@ const RoomItem = ({ roomItem: { room, entered, length }, handleJoin, idx, setRef
   );
 };
 
+export default RoomItem;
+
+interface StyledProps {
+  cur: number;
+  max: number;
+}
+
 const S = {
-  Container: styled.article`
+  Container: styled.article<StyledProps>`
     ${borderBoxDefault};
     position: relative;
 
@@ -53,12 +70,12 @@ const S = {
     height: 11.4rem;
     padding: 1.6rem;
     background-color: ${(props) =>
-      props.cur === props.max ? props.theme.sub4 : props.theme.white};
+      props.cur === props.max ? props.theme.color.sub4 : props.theme.color.white};
 
     cursor: pointer;
   `,
 
-  Header: styled.div`
+  Header: styled.div<StyledProps>`
     position: absolute;
     top: 1.6rem;
     left: 1.6rem;
@@ -70,11 +87,12 @@ const S = {
     span {
       ${fontBold};
       line-height: 2.1rem;
-      color: ${(props) => (props.cur === props.max ? props.theme.sub2 : props.theme.black)};
+      color: ${(props) =>
+        props.cur === props.max ? props.theme.color.sub2 : props.theme.color.black};
     }
   `,
 
-  Body: styled.div`
+  Body: styled.div<StyledProps>`
     position: absolute;
     top: 4.1rem;
     left: 1.6rem;
@@ -85,13 +103,14 @@ const S = {
     span {
       height: 100%;
       padding: 0 0.5rem;
-      background-color: ${(props) => (props.cur === props.max ? "#D8D0C5" : props.theme.sub4)};
+      background-color: ${(props) =>
+        props.cur === props.max ? "#D8D0C5" : props.theme.color.sub4};
 
       border-radius: 1rem;
 
       ${fontSmall}
       line-height: 2rem;
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
     }
   `,
 
@@ -112,18 +131,18 @@ const S = {
 
       ${fontMedium};
       line-height: 2.1rem;
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
 
       > span:nth-child(3) {
         height: 100%;
         padding: 0 0.5rem;
-        background-color: ${({ theme }) => theme.sub2};
+        background-color: ${({ theme }) => theme.color.sub2};
 
         border-radius: 1rem;
 
         ${fontSmall}
         line-height: 2rem;
-        color: ${({ theme }) => theme.white};
+        color: ${({ theme }) => theme.color.white};
       }
     }
 
@@ -134,7 +153,7 @@ const S = {
 
       ${fontSmall};
       line-height: 2rem;
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
 
       span {
         ${fontBold};
@@ -142,5 +161,3 @@ const S = {
     }
   `,
 };
-
-export default RoomItem;

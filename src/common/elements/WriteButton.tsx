@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 interface Props {
   pathname: string;
-  handleWriteModal: () => void;
+  handleWriteModal?: () => void;
   handleLoginModal: () => void;
 }
 
@@ -20,7 +20,7 @@ const WriteButton = ({ pathname, handleWriteModal, handleLoginModal }: Props) =>
       return;
     }
 
-    if (pathname === "/select") {
+    if (pathname === "/select" && handleWriteModal) {
       handleWriteModal();
     } else {
       navigate("/write", { state: { now: "/room" } });

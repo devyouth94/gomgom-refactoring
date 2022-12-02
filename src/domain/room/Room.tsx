@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 import instance from "app/module/instance";
 import { __getRoomBySearch, clearErrorRoom, clearQueryRoom } from "app/module/roomSlice";
 
@@ -15,6 +16,7 @@ import RoomItem from "common/components/RoomItem";
 import WriteButton from "common/elements/WriteButton";
 import ScrollTopButton from "common/elements/ScrollTopButton";
 
+import { RoomInfoProps, RoomItemProps } from "types";
 import { FEEDBACK_LINK } from "domain/select/Select";
 import useInfiniteScroll from "common/hooks/useInfiniteScroll";
 import useGetRoom from "domain/room/hooks/useGetRoom";
@@ -26,6 +28,17 @@ import Logo from "static/images/Logo.svg";
 import IconSurvey from "static/icons/Variety=Survey, Status=untab, Size=L.svg";
 import styled from "styled-components";
 
+const initailRoomInfo = {
+  currentPeople: 0,
+  hashTag: [],
+  host: "",
+  max: 0,
+  roomKey: 0,
+  title: "",
+  userKey: 0,
+  point: 0,
+};
+
 const Room = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
@@ -33,23 +46,25 @@ const Room = () => {
   const isScroll = useScrollTop();
 
   const { data, query, error } = useGetRoom(page);
-  const [roomInfo, setRoomInfo] = useState({});
+  const [roomInfo, setRoomInfo] = useState<RoomInfoProps>(initailRoomInfo);
 
   const [modal, handleModal, message] = useModalState(false);
   const [loginModal, handleLoginModal] = useModalState(false);
   const [joinModal, handleJoinModal] = useModalState(false);
 
-  const handleJoin = async (roomKey) => {
+  const handleJoin = async (roomKey: number) => {
     try {
       const { data } = await instance.post(`/room/${roomKey}`);
       setRoomInfo(data.result);
       handleJoinModal();
     } catch (error) {
-      const msg = error.response.data.errMsg;
-      if (msg.includes("로그인")) {
-        handleLoginModal(true);
-      } else {
-        handleModal(msg);
+      if (axios.isAxiosError(error)) {
+        const msg = (error.response?.data as { errMsg?: string }).errMsg;
+        if (msg?.includes("로그인")) {
+          handleLoginModal(true);
+        } else {
+          handleModal(msg);
+        }
       }
     }
   };
@@ -68,7 +83,7 @@ const Room = () => {
         />
       )}
 
-      <Header w={"4.5rem"}>
+      <Header w="4.5rem">
         <img onClick={() => window.location.reload()} src={Logo} alt="Logo" />
         <div />
         <a href={FEEDBACK_LINK} target="_blank" rel="noreferrer">
@@ -87,7 +102,7 @@ const Room = () => {
       <Layout>
         <S.Container>
           {!data.all.length && <span>상담방이 없습니다.</span>}
-          {data?.all.map((room, idx) => (
+          {data?.all.map((room: RoomItemProps, idx: number) => (
             <RoomItem
               key={room.roomKey}
               idx={idx}

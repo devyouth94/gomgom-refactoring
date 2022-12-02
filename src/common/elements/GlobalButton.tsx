@@ -1,14 +1,35 @@
 import { fontBold, fontExtraBold } from "shared/themes/textStyle";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 interface Props extends ButtonProps {
   children: string;
   onClick: ((event: any) => Promise<void>) | (() => void);
 }
 
-const GlobalButton = ({ children, onClick, h, bgc, borderR, fw, fs, font }: Props) => {
+const GlobalButton = ({
+  children,
+  onClick,
+  h,
+  bgc,
+  borderR,
+  fw,
+  fs,
+  font,
+  position,
+  bottom,
+}: Props) => {
   return (
-    <S.Button onClick={onClick} h={h} bgc={bgc} borderR={borderR} fw={fw} fs={fs} font={font}>
+    <S.Button
+      onClick={onClick}
+      h={h}
+      bgc={bgc}
+      borderR={borderR}
+      fw={fw}
+      fs={fs}
+      font={font}
+      position={position}
+      bottom={bottom}
+    >
       {children}
     </S.Button>
   );
@@ -23,10 +44,19 @@ interface ButtonProps {
   fw?: string;
   fs?: string;
   font?: string;
+  position?: string;
+  bottom?: string;
 }
 
 const S = {
   Button: styled.button<ButtonProps>`
+    position: ${(props) => props.position || "relative"};
+    ${(props) =>
+      props.bottom &&
+      css<ButtonProps>`
+        bottom: ${(props) => props.bottom};
+      `}
+
     display: flex;
     align-items: center;
     justify-content: center;

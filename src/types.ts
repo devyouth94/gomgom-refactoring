@@ -55,6 +55,30 @@ export interface VoteResultProps {
   };
 }
 
+export interface RoomItemProps {
+  currentPeople: number;
+  hashTag: string[];
+  host: string;
+  max: number;
+  roomKey: number;
+  title: string;
+  userKey: number;
+}
+
+export interface RoomInfoProps extends RoomItemProps {
+  point: number;
+}
+
+export interface ChatProps {
+  chat: string;
+  userKey: number;
+  createdAt?: string;
+  User: {
+    nickname: string;
+    point: number;
+  };
+}
+
 export interface LocationState {
   state: {
     now: string;

@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 const Loading = () => {
@@ -16,7 +15,7 @@ const S = {
       min-height: 100%;
     }
 
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
   `,
 };
 

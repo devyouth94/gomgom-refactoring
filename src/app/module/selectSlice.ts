@@ -1,13 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "app/module/instance";
+import axios from "axios";
 import { SelectItemProps } from "types";
 
 export const __getSelectAll = createAsyncThunk("/getSelectAll", async (page: number, thunkAPI) => {
   try {
     const { data } = await instance.get(`/select?page=${page}`);
     return thunkAPI.fulfillWithValue(data.result);
-  } catch (error: any) {
-    return thunkAPI.rejectWithValue(error.response.data.errMsg);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return thunkAPI.rejectWithValue((error.response?.data as { errMsg?: string }).errMsg);
+    }
   }
 });
 
@@ -17,8 +20,10 @@ export const __getSelectBySearch = createAsyncThunk(
     try {
       const { data } = await instance.get(`/select/search?searchWord=${query}`);
       return thunkAPI.fulfillWithValue({ data: data.result, query });
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.errMsg);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   },
 );
@@ -39,8 +44,10 @@ export const __getSelectBySelected = createAsyncThunk(
         );
         return thunkAPI.fulfillWithValue(data.result);
       }
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.errMsg);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   },
 );

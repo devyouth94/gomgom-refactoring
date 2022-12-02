@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import Header from "common/components/Header";
@@ -8,15 +7,23 @@ import GlobalButton from "common/elements/GlobalButton";
 import { fontBold, fontExtraBold, fontLarge, fontMedium } from "shared/themes/textStyle";
 import IconCloseWhite from "static/icons/Variety=close white, Status=untab, Size=L.svg";
 import styled from "styled-components";
+import { RoomInfoProps } from "types";
 
-const JoinModal = ({ pathname, handleJoinModal, roomInfo, entered }) => {
+interface Props {
+  pathname: string;
+  handleJoinModal: any;
+  roomInfo: RoomInfoProps;
+  entered: number[];
+}
+
+const JoinModal = ({ pathname, handleJoinModal, roomInfo, entered }: Props) => {
   const navigate = useNavigate();
 
   return (
     <S.Background>
-      <S.Header>
+      <Header isTransparent>
         <img onClick={handleJoinModal} src={IconCloseWhite} alt="IconCloseWhite" />
-      </S.Header>
+      </Header>
 
       <S.Body>
         <S.SubTitle>고민상담방</S.SubTitle>
@@ -38,22 +45,20 @@ const JoinModal = ({ pathname, handleJoinModal, roomInfo, entered }) => {
         </S.Footer>
       </S.Body>
 
-      <S.GlobalButton
+      <GlobalButton
         onClick={() => {
           navigate(`/chatroom/${roomInfo.roomKey}`, { state: { now: pathname } });
         }}
+        position="absolute"
+        bottom="2.4rem"
       >
         {entered.includes(roomInfo.roomKey) ? "참여중인 상담방" : "상담방 참여하기"}
-      </S.GlobalButton>
+      </GlobalButton>
     </S.Background>
   );
 };
 
 const S = {
-  Header: styled(Header)`
-    background-color: transparent;
-  `,
-
   Background: styled.section`
     @media ${({ theme }) => theme.device.PC} {
       left: ${({ theme }) => theme.style.left};
@@ -82,7 +87,7 @@ const S = {
 
     width: 100%;
 
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.color.white};
     ${fontMedium};
   `,
 
@@ -124,11 +129,6 @@ const S = {
         ${fontBold};
       }
     }
-  `,
-
-  GlobalButton: styled(GlobalButton)`
-    position: absolute;
-    bottom: 2.4rem;
   `,
 };
 
