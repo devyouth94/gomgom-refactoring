@@ -7,25 +7,29 @@ import IconImage from "static/icons/Variety=image, Status=untab, Size=S.svg";
 import IconImageDelete from "static/icons/Variety=image delete, Status=Untab, Size=L.svg";
 import styled from "styled-components";
 
-const WriteImageUpload = ({ setImages, num }) => {
-  const [previewImg, setPreviewImg] = useState({});
+interface Props {
+  setImages: React.Dispatch<React.SetStateAction<{ [num: number]: File | null }>>;
+  num: number;
+}
+
+const WriteImageUpload = ({ setImages, num }: Props) => {
+  const [previewImg, setPreviewImg] = useState<{ [num: number]: string }>({});
 
   //이미지 미리보기
-  const encodeFile = (file, name) => {
+  const encodeFile = (file: File, name: string) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    return new Promise((resolve) => {
+    return new Promise(() => {
       reader.onload = () => {
-        setPreviewImg((prev) => ({ ...prev, [name]: reader.result }));
-        resolve();
+        setPreviewImg((prev) => ({ ...prev, [Number(name)]: reader.result as string }));
       };
     });
   };
 
   //이미지 images에 담기
-  const handleFile = (event) => {
+  const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = event.target;
-    const file = event.target.files[0];
+    const file = event.target.files![0];
 
     //이미지 리사이징
     imageCompression(file, {
@@ -37,14 +41,14 @@ const WriteImageUpload = ({ setImages, num }) => {
         type: file.type,
       });
       encodeFile(newFile, name);
-      setImages((prev) => ({ ...prev, [name]: newFile }));
+      setImages((prev) => ({ ...prev, [Number(name)]: newFile }));
     });
   };
 
   //이미지 삭제(previewImg, images에 담긴 이미지 모두 삭제해준다)
-  const handlePreviewDelete = (payload) => {
+  const handlePreviewDelete = (payload: number) => {
     setPreviewImg((prev) => ({ ...prev, [payload]: "" }));
-    setImages((prev) => ({ ...prev, [payload]: "" }));
+    setImages((prev) => ({ ...prev, [payload]: null }));
   };
 
   return (
@@ -58,13 +62,7 @@ const WriteImageUpload = ({ setImages, num }) => {
         </S.PreviewContainer>
       ) : (
         <S.LabelContainer>
-          <input
-            name={num}
-            hidden
-            type="file"
-            accept="image/*"
-            onChange={(event) => handleFile(event)}
-          />
+          <input name={String(num)} hidden type="file" accept="image/*" onChange={handleFile} />
           <img src={IconImage} alt="IconImage" />
           <span>이미지 첨부(선택)</span>
         </S.LabelContainer>
@@ -74,7 +72,7 @@ const WriteImageUpload = ({ setImages, num }) => {
 };
 
 const S = {
-  PreviewContainer: styled.div`
+  PreviewContainer: styled.div<{ previewImg: string }>`
     ${borderBoxDefault};
     height: 15rem;
     margin-top: 2.8rem;
@@ -112,7 +110,7 @@ const S = {
       ${fontSmall};
       ${fontBold};
       line-height: 2rem;
-      color: ${({ theme }) => theme.sub1};
+      color: ${({ theme }) => theme.color.sub1};
     }
   `,
 };

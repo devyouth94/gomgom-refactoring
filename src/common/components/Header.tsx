@@ -43,7 +43,8 @@ const S = {
     height: 6.4rem;
     padding: 0 2rem;
     background-color: ${(props) => (props.isTransparent ? "transparent" : props.theme.color.bg)};
-    border-bottom: ${(props) => (props.length ? null : `1px solid ${props.theme.color.sub4}`)};
+    border-bottom: ${(props) =>
+      props.length !== 0 ? null : `1px solid ${props.theme.color.sub4}`};
 
     z-index: 9;
 

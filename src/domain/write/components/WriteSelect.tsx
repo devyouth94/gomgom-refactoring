@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import instance from "app/module/instance";
+import axios from "axios";
 
 import BasicModal from "common/components/modal/BasicModal";
 import Header from "common/components/Header";
@@ -17,6 +18,15 @@ import { borderBoxDefault } from "shared/themes/boxStyle";
 import IconBack from "static/icons/Variety=back, Status=untab, Size=L.svg";
 import IconAdd from "static/icons/Variety=add, Status=untab, Size=L.svg";
 import styled from "styled-components";
+import theme from "shared/themes/theme";
+
+interface NumObject {
+  [num: number]: string;
+}
+
+interface FileObject {
+  [num: number]: File | null;
+}
 
 const WriteSelect = () => {
   const navigate = useNavigate();
@@ -24,8 +34,8 @@ const WriteSelect = () => {
   const [numArr, setNumArr] = useState([1, 2]);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
-  const [options, setOptions] = useState({ 1: "", 2: "" });
-  const [images, setImages] = useState({ 1: "", 2: "" });
+  const [options, setOptions] = useState<NumObject>({ 1: "", 2: "" });
+  const [images, setImages] = useState<FileObject>({ 1: null, 2: null });
   const [time, setTime] = useState(1);
 
   const [modal, handleModal, message] = useModalState(false);
@@ -36,9 +46,9 @@ const WriteSelect = () => {
   }, []);
 
   //선택지 핸들러
-  const handleOptionChange = (event) => {
+  const handleOptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
-    setOptions((prev) => ({ ...prev, [name]: value }));
+    setOptions((prev) => ({ ...prev, [Number(name)]: value }));
   };
 
   //선택지 추가 핸들러
@@ -47,16 +57,16 @@ const WriteSelect = () => {
   };
 
   //선택지 삭제 핸들러
-  const handleOptionDelete = (payload) => {
+  const handleOptionDelete = (payload: number) => {
     setNumArr(numArr.filter((num) => num !== payload));
     setOptions((prev) => ({ ...prev, [payload]: "" }));
-    setImages((prev) => ({ ...prev, [payload]: "" }));
+    setImages((prev) => ({ ...prev, [payload]: null }));
   };
 
   //고민 게시글 작성 POST API
   const handleSubmit = async () => {
-    const optionArr = Object.values(options).filter((option) => option !== "");
-    const imageArr = Object.values(images).filter((image) => image !== "");
+    const optionArr: string[] = Object.values(options).filter((option) => option !== "");
+    const imageArr: string[] = Object.values(images).filter((image) => image !== "");
 
     if (imageArr.length !== 0 && optionArr.length !== imageArr.length) {
       handleModal("사진과 선택지의 개수가 다릅니다.");
@@ -65,8 +75,9 @@ const WriteSelect = () => {
 
       formData.append("title", title);
       formData.append("category", category);
+      // @ts-ignore: Unreachable code error
       formData.append("options", optionArr);
-      formData.append("time", time);
+      formData.append("time", String(time));
 
       if (imageArr[0]) {
         for (let i = 0; i < imageArr.length; i++) {
@@ -80,7 +91,9 @@ const WriteSelect = () => {
         });
         handleUploadModal("게시글 등록 완료!");
       } catch (error) {
-        handleModal(error.response.data.errMsg);
+        if (axios.isAxiosError(error)) {
+          handleModal((error.response?.data as { errMsg?: string }).errMsg);
+        }
       }
     }
   };
@@ -137,7 +150,7 @@ const WriteSelect = () => {
 
                 <S.TextContainer mb="1.6rem">
                   <textarea
-                    name={num}
+                    name={String(num)}
                     value={options[num]}
                     onChange={handleOptionChange}
                     maxLength={15}
@@ -153,9 +166,9 @@ const WriteSelect = () => {
             {numArr.length < 4 && (
               <GlobalButton
                 onClick={handleOptionAdd}
-                bgc={({ theme }) => theme.white}
-                font={({ theme }) => theme.black}
-                fw={"bold"}
+                bgc={theme.color.white}
+                font={theme.color.black}
+                fw="bold"
               >
                 <img src={IconAdd} alt="IconAdd" />
                 <span>선택지 추가하기</span>
@@ -191,7 +204,7 @@ const S = {
     line-height: 2.4rem;
   `,
 
-  TextContainer: styled.article`
+  TextContainer: styled.article<{ mb?: string }>`
     ${borderBoxDefault};
     position: relative;
 
@@ -201,7 +214,7 @@ const S = {
     min-height: 12.1rem;
     padding: 1.6rem;
     margin-bottom: ${(props) => props.mb || "3.2rem"};
-    background-color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.color.white};
 
     textarea {
       width: 100%;
@@ -223,7 +236,7 @@ const S = {
 
       ${fontSmall};
       line-height: 2rem;
-      color: ${({ theme }) => theme.sub1};
+      color: ${({ theme }) => theme.color.sub1};
     }
   `,
 
@@ -233,7 +246,7 @@ const S = {
 
     height: 100%;
     margin-bottom: 3.2rem;
-    background-color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.color.white};
 
     div {
       display: flex;
@@ -246,7 +259,7 @@ const S = {
       input {
         width: 2.2rem;
         height: 2.2rem;
-        accent-color: ${({ theme }) => theme.black};
+        accent-color: ${({ theme }) => theme.color.black};
 
         cursor: pointer;
       }

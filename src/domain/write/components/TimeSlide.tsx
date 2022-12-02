@@ -1,10 +1,13 @@
-import React from "react";
-
 import { TIME_ARR } from "shared/utils/arr";
 import { fontBold, fontMedium } from "shared/themes/textStyle";
 import styled, { css } from "styled-components";
 
-const TimeSlide = ({ time, setTime }) => {
+interface Props {
+  time: number;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const TimeSlide = ({ time, setTime }: Props) => {
   return (
     <S.TimeSlide selectTime={time}>
       {TIME_ARR.map((item) => (
@@ -18,7 +21,7 @@ const TimeSlide = ({ time, setTime }) => {
 };
 
 const S = {
-  TimeSlide: styled.div`
+  TimeSlide: styled.div<{ selectTime: number }>`
     position: relative;
 
     display: flex;
@@ -40,7 +43,7 @@ const S = {
     }
 
     div:nth-child(1) {
-      color: ${({ theme }) => theme.white};
+      color: ${({ theme }) => theme.color.white};
       ${fontBold}
     }
 
@@ -48,7 +51,7 @@ const S = {
       ${(props) =>
         Number(props.selectTime) !== 1 &&
         css`
-          color: ${({ theme }) => theme.white};
+          color: ${({ theme }) => theme.color.white};
           ${fontBold}
         `}
     }
@@ -58,7 +61,7 @@ const S = {
         Number(props.selectTime) !== 1 &&
         Number(props.selectTime) !== 4 &&
         css`
-          color: ${({ theme }) => theme.white};
+          color: ${({ theme }) => theme.color.white};
           ${fontBold}
         `}
     }
@@ -69,7 +72,7 @@ const S = {
         Number(props.selectTime) !== 4 &&
         Number(props.selectTime) !== 8 &&
         css`
-          color: ${({ theme }) => theme.white};
+          color: ${({ theme }) => theme.color.white};
           ${fontBold}
         `}
     }
@@ -81,13 +84,13 @@ const S = {
         Number(props.selectTime) !== 8 &&
         Number(props.selectTime) !== 12 &&
         css`
-          color: ${({ theme }) => theme.white};
+          color: ${({ theme }) => theme.color.white};
           ${fontBold}
         `}
     }
   `,
 
-  Time: styled.span`
+  Time: styled.span<{ time: number }>`
     position: absolute;
     top: 0;
     left: 0;
@@ -108,7 +111,7 @@ const S = {
       }
     }};
     height: 4rem;
-    background-color: ${({ theme }) => theme.sub1};
+    background-color: ${({ theme }) => theme.color.sub1};
 
     transition-duration: 0.3s;
     border-radius: 2rem;

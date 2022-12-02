@@ -2,7 +2,7 @@ import { fontBold, fontExtraBold } from "shared/themes/textStyle";
 import styled, { css } from "styled-components";
 
 interface Props extends ButtonProps {
-  children: string;
+  children: string | React.ReactNode;
   onClick: ((event: any) => Promise<void>) | (() => void);
 }
 

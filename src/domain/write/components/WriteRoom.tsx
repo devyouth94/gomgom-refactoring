@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import instance from "app/module/instance";
+import axios from "axios";
 
 import BasicModal from "common/components/modal/BasicModal";
 import Header from "common/components/Header";
@@ -23,7 +24,7 @@ const WriteRoom = () => {
   const [title, setTitle] = useState("");
   const [countPeople, setCountPeople] = useState(1);
   const [keyword, setKeyword] = useState("");
-  const [keywordArr, setKeywordArr] = useState([]);
+  const [keywordArr, setKeywordArr] = useState<string[]>([]);
   const [roomkey, setRoomkey] = useState(0);
 
   const [modal, handleModal, message] = useModalState(false);
@@ -33,7 +34,7 @@ const WriteRoom = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const keywordHandler = (event) => {
+  const keywordHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (keywordArr.includes(keyword)) {
@@ -47,7 +48,7 @@ const WriteRoom = () => {
     setKeyword("");
   };
 
-  const keywordDeleteHandler = (value) => {
+  const keywordDeleteHandler = (value: string) => {
     setKeywordArr((prev) => prev.filter((i) => i !== value));
   };
 
@@ -75,7 +76,9 @@ const WriteRoom = () => {
       setRoomkey(data.result.roomKey);
       handleUploadModal("고민 상담방 등록 완료!");
     } catch (error) {
-      handleModal(error.response.data.errMsg);
+      if (axios.isAxiosError(error)) {
+        handleModal((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   };
 
@@ -174,7 +177,7 @@ const S = {
 
     ${fontMedium};
     line-height: 2.1rem;
-    color: ${({ theme }) => theme.sub2};
+    color: ${({ theme }) => theme.color.sub2};
   `,
 
   TextContainer: styled.article`
@@ -187,8 +190,8 @@ const S = {
     height: 100%;
     min-height: 12.1rem;
     padding: 1.6rem;
-    margin-bottom: ${(props) => props.mb || "3.2rem"};
-    background-color: ${({ theme }) => theme.white};
+    margin-bottom: 3.2rem;
+    background-color: ${({ theme }) => theme.color.white};
 
     textarea {
       width: 100%;
@@ -210,11 +213,11 @@ const S = {
 
       ${fontSmall};
       line-height: 2rem;
-      color: ${({ theme }) => theme.sub1};
+      color: ${({ theme }) => theme.color.sub1};
     }
   `,
 
-  Inner: styled.article`
+  Inner: styled.article<{ length: number }>`
     display: flex;
     flex-wrap: wrap;
     column-gap: 0.8rem;
@@ -227,7 +230,7 @@ const S = {
 
       height: 3.2rem;
       padding: 1.1rem 0.7rem 1.1rem 1.1rem;
-      background-color: ${({ theme }) => theme.sub4};
+      background-color: ${({ theme }) => theme.color.sub4};
 
       border-radius: 1.6rem;
 
@@ -262,7 +265,7 @@ const S = {
     padding: 1.4rem;
     margin-top: 2rem;
     margin-bottom: 3.2rem;
-    background-color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.color.white};
 
     & > div:nth-child(2) {
       ${fontBold};
@@ -277,7 +280,7 @@ const S = {
 
     width: 4.8rem;
     height: 4.8rem;
-    background-color: ${({ theme }) => theme.sub4};
+    background-color: ${({ theme }) => theme.color.sub4};
 
     border-radius: 1.4rem;
 
