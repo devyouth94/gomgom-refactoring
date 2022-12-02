@@ -6,7 +6,13 @@ import profileYellow from "static/images/profiles/Property 1=Yellow, Property 2=
 
 import styled from "styled-components";
 
-const ProfileImg = ({ className, point, size }) => {
+interface Props {
+  className?: string;
+  point: number;
+  size: string;
+}
+
+const ProfileImg = ({ className, point, size }: Props) => {
   return (
     <Profile className={className} size={size}>
       {0 <= point && point <= 10 ? (
@@ -25,7 +31,7 @@ const ProfileImg = ({ className, point, size }) => {
 };
 export default ProfileImg;
 
-const Profile = styled.div`
+const Profile = styled.div<{ size: string }>`
   display: flex;
   align-items: center;
   justify-content: center;

@@ -79,6 +79,7 @@ const Select = () => {
               idx={idx}
               setRef={setLastItemRef}
               length={data.length}
+              pathname={pathname}
             />
           ))}
         </S.Container>

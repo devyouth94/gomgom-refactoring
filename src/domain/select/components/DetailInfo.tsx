@@ -1,6 +1,6 @@
-import React from "react";
 import ProfileImg from "common/elements/ProfileImg";
 
+import { DetailItemProps } from "types";
 import { remainedTime } from "shared/utils/timeCalculation";
 import { fontExtraBold, fontLarge, fontMedium } from "shared/themes/textStyle";
 
@@ -8,10 +8,14 @@ import IconTimeWarning from "static/icons/Variety=Time warning, Status=untab, Si
 import IconTimeOver from "static/icons/Variety=Timeover, Status=Untab, Size=S.svg";
 import styled from "styled-components";
 
-const DetailInfo = ({ info }) => {
+interface Props {
+  info: DetailItemProps;
+}
+
+const DetailInfo = ({ info }: Props) => {
   return (
     <S.InfoContainer>
-      <ProfileImg point={info.point} size={"4rem"} />
+      <ProfileImg point={info.point} size="4rem" />
       <S.Nickname>{info.nickname}</S.Nickname>
       <S.Category>{info.category}</S.Category>
       <S.Title>{info.title}</S.Title>
@@ -44,19 +48,19 @@ const S = {
 
     ${fontMedium}
     line-height: 2.1rem;
-    color: ${({ theme }) => theme.sub2};
+    color: ${({ theme }) => theme.color.sub2};
   `,
 
   Category: styled.div`
     padding: 0 0.4rem;
     margin-top: 2rem;
-    background-color: ${({ theme }) => theme.main2};
+    background-color: ${({ theme }) => theme.color.main2};
 
     border-radius: calc(2.1rem / 2);
 
     ${fontMedium};
     line-height: 2.1rem;
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.color.white};
   `,
 
   Title: styled.div`
@@ -82,11 +86,11 @@ const S = {
     ${fontMedium};
 
     .deadline {
-      color: ${({ theme }) => theme.warning};
+      color: ${({ theme }) => theme.color.warning};
     }
 
     .timeover {
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
     }
   `,
 };

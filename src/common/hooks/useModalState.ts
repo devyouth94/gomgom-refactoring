@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 
-type ReturnTypes = [boolean, (msg?: string) => void, string];
+// (msg?: string) => void
+type ReturnTypes = [boolean, any, string];
 
 const useModalState = (initialState: boolean): ReturnTypes => {
   const [modal, setModal] = useState(initialState);

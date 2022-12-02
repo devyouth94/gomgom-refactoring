@@ -13,13 +13,14 @@ interface Props {
   idx: number;
   setRef: any;
   length: number;
+  pathname: string;
 }
 
-const SelectItem = ({ item, idx, setRef, length }: Props) => {
+const SelectItem = ({ item, idx, setRef, length, pathname }: Props) => {
   const navigate = useNavigate();
 
   const handleEnterDetail = () => {
-    navigate(`/detail/${item.selectKey}`);
+    navigate(`/detail/${item.selectKey}`, { state: { now: pathname } });
   };
 
   return (

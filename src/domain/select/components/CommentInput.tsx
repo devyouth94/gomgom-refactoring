@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "app/config/hooks";
 import { __postComment } from "app/module/commentSlice";
 
 import FooterInput from "common/components/FooterInput";
@@ -8,15 +8,23 @@ import { userStorage } from "shared/utils/localStorage";
 
 import IconSend from "static/icons/Variety=send, Status=untab, Size=L.svg";
 
-const CommentInput = ({ selectKey, handleLoginModal, handleModal }) => {
-  const dispatch = useDispatch();
+interface Props {
+  selectKey: string | undefined;
+  handleLoginModal: () => void;
+  handleModal: (msg?: string) => void;
+}
+
+const CommentInput = ({ selectKey, handleLoginModal, handleModal }: Props) => {
+  const dispatch = useAppDispatch();
   const [comment, setComment] = useState("");
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setComment(event.target.value);
   };
 
-  const handlePostComment = (event) => {
+  const handlePostComment = (
+    event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLImageElement>,
+  ) => {
     event.preventDefault();
 
     if (!userStorage.getToken()) {

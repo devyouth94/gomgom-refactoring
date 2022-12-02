@@ -1,7 +1,11 @@
-import React from "react";
 import { MS } from "common/components/modal/modalStyles";
 
-const DeleteModal = ({ handleClick, handleDelete }) => {
+interface Props {
+  handleClick: () => void;
+  handleDelete: () => Promise<void>;
+}
+
+const DeleteModal = ({ handleClick, handleDelete }: Props) => {
   return (
     <>
       <MS.Window>

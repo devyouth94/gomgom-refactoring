@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "app/config/hooks";
 import { __deleteRecomment, __editRecomment } from "app/module/commentSlice";
 
 import ProfileImg from "common/elements/ProfileImg";
@@ -9,19 +9,25 @@ import { remainedTime } from "shared/utils/timeCalculation";
 
 import { fontBold, fontExtraBold, fontExtraSmall, fontMedium } from "shared/themes/textStyle";
 import styled from "styled-components";
+import { RecommentItemProps } from "types";
 
-const Recomment = ({ recomment, handleModal }) => {
-  const dispatch = useDispatch();
+interface Props {
+  recomment: RecommentItemProps;
+  handleModal: (msg?: string) => void;
+}
+
+const Recomment = ({ recomment, handleModal }: Props) => {
+  const dispatch = useAppDispatch();
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [newRecomment, setNewRecomment] = useState("");
 
-  const handleEditToggle = (comment) => {
+  const handleEditToggle = (comment: string) => {
     setIsEditMode((prev) => !prev);
     setNewRecomment(comment);
   };
 
-  const handleEditRecomment = (recommentKey) => {
+  const handleEditRecomment = (recommentKey: number) => {
     if (!newRecomment.trim().length) {
       handleModal("내용을 입력해주세요.");
       return;
@@ -31,13 +37,13 @@ const Recomment = ({ recomment, handleModal }) => {
     setIsEditMode((prev) => !prev);
   };
 
-  const handleDeleteRecomment = (recommentKey) => {
+  const handleDeleteRecomment = (recommentKey: number) => {
     dispatch(__deleteRecomment(recommentKey));
   };
 
   return (
     <S.RecommentContainer>
-      <ProfileImg point={recomment.User.point} size={"3rem"} />
+      <ProfileImg point={recomment.User.point} size="3rem" />
       <div>
         <S.Top>
           <div>
@@ -103,7 +109,7 @@ const S = {
         margin-left: 0.8rem;
 
         ${fontExtraSmall};
-        color: ${({ theme }) => theme.sub2};
+        color: ${({ theme }) => theme.color.sub2};
       }
     }
 
@@ -127,7 +133,7 @@ const S = {
       width: 100%;
       padding: 0.5rem 1rem;
       border-radius: 999rem;
-      background-color: ${({ theme }) => theme.white};
+      background-color: ${({ theme }) => theme.color.white};
     }
   `,
 };

@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState, useCallback } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "app/config/hooks";
+import axios from "axios";
 import instance from "app/module/instance";
 import { clearErrorComment, __getComment } from "app/module/commentSlice";
 
@@ -18,17 +19,32 @@ import useModalState from "common/hooks/useModalState";
 import { userStorage } from "shared/utils/localStorage";
 import { fontMedium } from "shared/themes/textStyle";
 
+import { CommentItemProps, DetailItemProps, LocationState } from "types";
 import IconBack from "static/icons/Variety=back, Status=untab, Size=L.svg";
 import IconDelete from "static/icons/Variety=delete, Status=untab, Size=L.svg";
 import styled, { css } from "styled-components";
 
+const initailDetailInfo = {
+  category: "",
+  completion: false,
+  deadLine: "",
+  image: [],
+  nickname: "",
+  options: [],
+  point: 0,
+  selectKey: 0,
+  title: "",
+  userKey: 0,
+};
+
 const Detail = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { state } = useLocation() as LocationState;
   const { selectKey } = useParams();
 
-  const { data: commentList, error } = useSelector((state) => state.comment);
-  const [detailInfo, setDetailInfo] = useState({});
+  const { data: commentList, error } = useAppSelector((state) => state.comment);
+  const [detailInfo, setDetailInfo] = useState<DetailItemProps>(initailDetailInfo);
 
   const [modal, handleModal, message] = useModalState(false);
   const [loginModal, handleLoginModal] = useModalState(false);
@@ -39,7 +55,9 @@ const Detail = () => {
       const { data } = await instance.get(`/select/${selectKey}`);
       setDetailInfo(data.result);
     } catch (error) {
-      handleModal(error.response.data.errMsg);
+      if (axios.isAxiosError(error)) {
+        handleModal((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   }, [selectKey, handleModal]);
 
@@ -54,15 +72,17 @@ const Detail = () => {
   const __DeleteDetail = async () => {
     try {
       await instance.delete(`/select/${selectKey}`);
-      navigate(-1, { replace: true });
+      navigate(`${state.now}`, { replace: true });
     } catch (error) {
-      handleModal(error.response.data.errMsg);
+      if (axios.isAxiosError(error)) {
+        handleModal((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   };
 
   return (
     <>
-      {error && <BasicModal handleClick={dispatch(clearErrorComment())}>{error}</BasicModal>}
+      {error && <BasicModal handleClick={() => dispatch(clearErrorComment())}>{error}</BasicModal>}
       {modal && <BasicModal handleClick={handleModal}>{message}</BasicModal>}
       {loginModal && <LoginModal handleClick={handleLoginModal} />}
       {deleteModal && <DeleteModal handleClick={handleDeleteModal} handleDelete={__DeleteDetail} />}
@@ -70,7 +90,7 @@ const Detail = () => {
       <Header>
         <img onClick={() => navigate(-1)} src={IconBack} alt="IconBack" />
         <div />
-        {userStorage.getUserKey() === detailInfo.userKey && (
+        {userStorage.getUserKey() === detailInfo?.userKey && (
           <img onClick={handleDeleteModal} src={IconDelete} alt="IconDelete" />
         )}
       </Header>
@@ -83,7 +103,7 @@ const Detail = () => {
 
           <S.CommentContainer length={commentList.length}>
             {!commentList.length && <span>댓글이 없습니다.</span>}
-            {commentList?.map((comment) => (
+            {commentList?.map((comment: CommentItemProps) => (
               <Comment key={comment.commentKey} comment={comment} handleModal={handleModal} />
             ))}
           </S.CommentContainer>
@@ -104,14 +124,14 @@ const S = {
     padding: 6.4rem 0 6.4rem 0;
   `,
 
-  CommentContainer: styled.section`
+  CommentContainer: styled.section<{ length: number }>`
     padding-bottom: 2.4rem;
     margin: 0 -2rem;
 
     ${(props) =>
       !props.length &&
       css`
-        border-top: 1px solid ${({ theme }) => theme.sub4};
+        border-top: 1px solid ${({ theme }) => theme.color.sub4};
       `}
 
     > span {

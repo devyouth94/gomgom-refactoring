@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "app/config/hooks";
 import { __deleteComment, __editComment, __postRecomment } from "app/module/commentSlice";
 
 import ProfileImg from "common/elements/ProfileImg";
@@ -10,16 +10,22 @@ import { remainedTime } from "shared/utils/timeCalculation";
 
 import { fontBold, fontExtraBold, fontExtraSmall, fontMedium } from "shared/themes/textStyle";
 import styled, { css } from "styled-components";
+import { CommentItemProps } from "types";
 
-const Comment = ({ comment, handleModal }) => {
-  const dispatch = useDispatch();
+interface Props {
+  comment: CommentItemProps;
+  handleModal: (msg?: string) => void;
+}
+
+const Comment = ({ comment, handleModal }: Props) => {
+  const dispatch = useAppDispatch();
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [isReplyMode, setIsReplyMode] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [replyComment, setReplyComment] = useState("");
 
-  const handleEditToggle = (comment) => {
+  const handleEditToggle = (comment: string) => {
     setIsEditMode((prev) => !prev);
     setNewComment(comment);
   };
@@ -28,7 +34,7 @@ const Comment = ({ comment, handleModal }) => {
     setIsReplyMode((prev) => !prev);
   };
 
-  const handleEditComment = (commentKey) => {
+  const handleEditComment = (commentKey: number) => {
     if (!newComment.trim().length) {
       handleModal("내용을 입력해주세요.");
       return;
@@ -38,11 +44,11 @@ const Comment = ({ comment, handleModal }) => {
     setIsEditMode((prev) => !prev);
   };
 
-  const handleDeleteComment = (commentKey) => {
+  const handleDeleteComment = (commentKey: number) => {
     dispatch(__deleteComment(commentKey));
   };
 
-  const handlePostRecomment = (commentKey) => {
+  const handlePostRecomment = (commentKey: number) => {
     if (!replyComment.trim().length) {
       handleModal("내용을 입력해주세요.");
       return;
@@ -55,7 +61,7 @@ const Comment = ({ comment, handleModal }) => {
 
   return (
     <S.Comment key={comment.commentKey}>
-      <ProfileImg point={comment.point} size={"4rem"} />
+      <ProfileImg point={comment.point} size="4rem" />
       <div>
         <S.Top>
           <div>
@@ -124,7 +130,7 @@ const S = {
     gap: 1.6rem;
 
     padding: 2.4rem 2rem 0 2rem;
-    border-top: 1px solid ${({ theme }) => theme.sub4};
+    border-top: 1px solid ${({ theme }) => theme.color.sub4};
 
     > div:nth-child(2) {
       display: flex;
@@ -151,7 +157,7 @@ const S = {
         margin-left: 0.8rem;
 
         ${fontExtraSmall};
-        color: ${({ theme }) => theme.sub2};
+        color: ${({ theme }) => theme.color.sub2};
       }
     }
 
@@ -175,15 +181,15 @@ const S = {
       width: 100%;
       padding: 0.5rem 1rem;
       border-radius: 999rem;
-      background-color: ${({ theme }) => theme.white};
+      background-color: ${({ theme }) => theme.color.white};
     }
   `,
 
-  Bottom: styled.div`
+  Bottom: styled.div<{ isReplyMode: boolean }>`
     ${fontMedium};
 
     > span {
-      color: ${({ theme }) => theme.main2};
+      color: ${({ theme }) => theme.color.main2};
       cursor: pointer;
     }
 
@@ -201,7 +207,7 @@ const S = {
           input {
             padding: 0.5rem 1rem;
             border-radius: 999rem;
-            background-color: ${({ theme }) => theme.white};
+            background-color: ${({ theme }) => theme.color.white};
           }
 
           span {
