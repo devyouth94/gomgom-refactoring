@@ -1,4 +1,4 @@
-> [리팩토링 관련 브랜치입니다. 프로젝트의 내용은 여기를 클릭해주세요!](https://github.com/devyouth94/gomgom)
+> [리팩토링 관련 레포지토리입니다. 프로젝트의 전반적인 내용에 대한 설명이 궁금하시면 여기를 클릭해주세요!](https://github.com/devyouth94/gomgom)
 
 # 리팩토링 내용 및 과정
 
